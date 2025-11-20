@@ -9,7 +9,10 @@ router.get("/", (req, res) => {
 });
 
 // Handle form submit
-router.post("/register", userController.registerUser);
+router.post("/register", (req, res) => {
+  res.send("Register working");
+});
+
 
 // Success page
 router.get("/success", (req, res) => {

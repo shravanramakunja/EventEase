@@ -46,10 +46,18 @@ app.use("/", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/checkin", checkinRoutes);
 app.use("/users", userRoutes);
+app.use("/admin", adminRoutes);
+app.use("/checkin", checkinRoutes);
+app.use("/users", userRoutes);
 
 // Home redirect (optional)
 app.get("/", (req, res) => {
   res.render("index"); // Registration page
+});
+
+
+app.get("/admin", (req, res) => {
+  res.render("adminDashboard");
 });
 
 

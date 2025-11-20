@@ -45,11 +45,15 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/checkin", checkinRoutes);
-app.use("/users", userRoutes);
 
 // Home redirect (optional)
 app.get("/", (req, res) => {
   res.render("index"); // Registration page
+});
+
+
+app.get("/admin", (req, res) => {
+  res.render("adminDashboard");
 });
 
 
@@ -61,5 +65,5 @@ app.get("/", (req, res) => {
 // ----------------------
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(` Server running on http://localhost:${PORT}`);
 });
