@@ -7,7 +7,7 @@ const userController = require("../controllers/userController");
 router.get("/", (req, res) => {
   res.render("index");
 });
-  
+\
 // Handle form submit
 router.post("/register", userController.registerUser);
 
