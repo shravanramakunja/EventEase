@@ -8,4 +8,4 @@ module.exports = nodemailer.createTransport({
     pass: process.env.MAIL_PASS,
   },
 });
-
+console.log(process.env.MAIL_USER, process.env.MAIL_PASS);

@@ -8,11 +8,17 @@ const excelHandler = require("../utils/excelHandler");
 
 exports.registerUser = async (req, res) => {
   try {
+
+    // 1️⃣ Get form data
     const { name, usn, email, food } = req.body;
 
+    // 2️⃣ Generate seat number (random)
     const seat = Math.floor(100 + Math.random() * 900);
+
+    // 3️⃣ Generate unique ID
     const uniqueId = uuidv4();
 
+    // 4️⃣ Generate QR JSON data
     const qrData = JSON.stringify({
       name,
       usn,
@@ -20,23 +26,11 @@ exports.registerUser = async (req, res) => {
       uniqueId,
     });
 
-    // ⬇️⬇️⬇️ ADD THIS BLOCK HERE — BEFORE GENERATING QR ⬇️⬇️⬇️
-
-    // Ensure /public/qr exists
-    const qrFolder = path.join(__dirname, "..", "public", "qr");
-    if (!fs.existsSync(qrFolder)) {
-      fs.mkdirSync(qrFolder, { recursive: true });
-    }
-
-    // Generate QR file path
-    const qrPath = path.join(qrFolder, `${uniqueId}.png`);
-
-    // Generate QR Code file
+    // 5️⃣ Generate QR image file
+    const qrPath = path.join(__dirname, "..", "public", "qr", `${uniqueId}.png`);
     await QRCode.toFile(qrPath, qrData);
 
-    // ⬆️⬆️⬆️ END OF BLOCK ⬆️⬆️⬆️
-
-    // Save registration in Excel
+    // 6️⃣ Save to Excel file
     excelHandler.saveRegistration({
       Name: name,
       USN: usn,
@@ -47,7 +41,7 @@ exports.registerUser = async (req, res) => {
       CheckedIn: "No",
     });
 
-    // Load email template
+    // 7️⃣ Load & render HTML email template
     const templatePath = path.join(__dirname, "..", "templates", "emailTemplate.html");
     const emailHTML = fs.readFileSync(templatePath, "utf8");
 
@@ -59,6 +53,7 @@ exports.registerUser = async (req, res) => {
       year: new Date().getFullYear(),
     });
 
+    // 8️⃣ Send email
     await transporter.sendMail({
       from: process.env.MAIL_USER,
       to: email,
@@ -68,14 +63,16 @@ exports.registerUser = async (req, res) => {
         {
           filename: "qrcode.png",
           path: qrPath,
-          cid: "qrImage",
+          cid: "qrImage", // must match <img src="cid:qrImage">
         },
       ],
     });
 
+    // 9️⃣ Redirect to success page
     res.redirect("/success");
+
   } catch (err) {
     console.error("Registration Error:", err);
-    res.status(500).send("Something went wrong");
+    res.status(500).send("Error processing registration");
   }
 };
