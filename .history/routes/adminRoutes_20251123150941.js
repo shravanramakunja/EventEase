@@ -7,13 +7,11 @@ router.get("/", adminController.dashboard);
 
 // Login form (GET)
 router.get("/login", (req, res) => {
-  res.render("adminLogin", { error: null });
+  res.render("adminLogin", { error: null }); // FIX ADDED
 });
 
 // Login submit (POST)
 router.post("/login", adminController.login);
-
-// ✅ Correct export route → GET, not POST
-router.get("/export", adminController.exportCSV);
+router.post()
 
 module.exports = router;

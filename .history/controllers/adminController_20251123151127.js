@@ -1,5 +1,7 @@
+// controllers/adminController.js
 const excelHandler = require("../utils/excelHandler");
 const csvExporter = require("../utils/csvExporter");
+
 
 exports.dashboard = (req, res) => {
   if (!req.session.admin) {
@@ -20,25 +22,25 @@ exports.login = (req, res) => {
     req.session.admin = true;
     return res.redirect("/admin");
   }
-
-  res.render("adminLogin", { error: "Invalid credentials" });
-};
-
-// ✅ FIXED — Now properly outside login function
-exports.exportCSV = async (req, res) => {
+exports.exportCSV = (req, res) => {
   if (!req.session.admin) {
     return res.redirect("/admin/login");
   }
 
-  const success = await csvExporter.exportCSV();
-
-  if (!success) {
-    return res.send("Error exporting CSV");
-  }
-
-  const filePath = require("path").join(__dirname, "../data/registrations.csv");
+  const filePath = csvExporter.export();
 
   res.download(filePath, "registrations.csv", (err) => {
-    if (err) console.error("CSV Download Error:", err);
+    if (err) {
+      console.error("CSV download error:", err);
+    }
   });
+};
+
+
+
+
+
+
+
+  res.render("adminLogin", { error: "Invalid credentials" });
 };
