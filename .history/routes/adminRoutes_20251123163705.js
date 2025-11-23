@@ -16,7 +16,7 @@ router.post("/login", adminController.login);
 // ✅ Correct export route → GET, not POST
 router.get("/export", adminController.exportCSV);
 
-// Delete user 
+
 router.get("/delete/:uniqueId", adminController.deleteUser);
 
 module.exports = router;
