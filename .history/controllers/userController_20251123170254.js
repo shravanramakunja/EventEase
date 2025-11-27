@@ -3,20 +3,16 @@ const path = require("path");
 const ejs = require("ejs");
 const QRCode = require("qrcode");
 const { v4: uuidv4 } = require("uuid");
-const transporter = require("../config/mailer");
+const transporter = require("../config/mailer");   // your nodemailer transporter
 const excelHandler = require("../utils/excelHandler");
 
 exports.registerUser = async (req, res) => {
   try {
-    const { name, usn, email, food, parents } = req.body;
+    const { name, usn, email, food } = req.body;
 
-    // Generate seat
     const seat = Math.floor(100 + Math.random() * 900);
-
-    // Unique ID for ticket
     const uniqueId = uuidv4();
 
-    // QR Data
     const qrData = JSON.stringify({
       name,
       usn,
@@ -24,19 +20,21 @@ exports.registerUser = async (req, res) => {
       uniqueId,
     });
 
-    // Ensure /public/qr folder exists
+    // Ensure /public/qr exists
     const qrFolder = path.join(__dirname, "..", "public", "qr");
     if (!fs.existsSync(qrFolder)) {
       fs.mkdirSync(qrFolder, { recursive: true });
     }
 
-    // Create QR path
+    // Generate QR file path
     const qrPath = path.join(qrFolder, `${uniqueId}.png`);
 
-    // Generate QR image
+    // Generate QR Code file
     await QRCode.toFile(qrPath, qrData);
 
-    // Save registration to Excel
+    // ⬆️⬆️⬆️ END OF BLOCK ⬆️⬆️⬆️
+
+    // Save registration in Excel
     excelHandler.saveRegistration({
       Name: name,
       USN: usn,
@@ -47,40 +45,24 @@ exports.registerUser = async (req, res) => {
       CheckedIn: "No",
     });
 
-    // Load email template HTML
+    // Load email template
     const templatePath = path.join(__dirname, "..", "templates", "emailTemplate.html");
     const emailHTML = fs.readFileSync(templatePath, "utf8");
 
-    // Render dynamic values
     const finalHTML = ejs.render(emailHTML, {
       name,
       usn,
       seat,
       food,
-      parents: parents || 0,
-      date: "15th NOVEMBER 2024",
-      address: "Dr M V Jayaraman Auditorium",
-      time: "2:00 PM",
-      title: "XXXVII GRADUATION DAY",
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
     });
 
-    // ------------ EMAIL SENDING ------------
     await transporter.sendMail({
       from: process.env.MAIL_USER,
       to: email,
-      subject: "Your Event Registration – EventEase",
-
+      subject: "Your Event Registration & QR Code",
       html: finalHTML,
-
       attachments: [
-        // EVENTEASE LOGO
-        {
-          filename: "eventease-logo.png",
-          path: "./public/uploads/eventease-logo.png",
-          cid: "eventLogo",
-        },
-        // QR-CODE
         {
           filename: "qrcode.png",
           path: qrPath,
@@ -89,9 +71,7 @@ exports.registerUser = async (req, res) => {
       ],
     });
 
-    // Redirect on success
     res.redirect("/success");
-
   } catch (err) {
     console.error("Registration Error:", err);
     res.status(500).send("Something went wrong");
