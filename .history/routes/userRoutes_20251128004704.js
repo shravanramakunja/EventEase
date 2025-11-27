@@ -3,10 +3,12 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 
-// Show registration page
-router.get("/", userController.showRegister);
-
-// Handle registration form
+// Registration page
+router.get("/", (req, res) => {
+  res.render("index");
+});
+  
+// Handle form submit
 router.post("/register", userController.registerUser);
 
 // Success page

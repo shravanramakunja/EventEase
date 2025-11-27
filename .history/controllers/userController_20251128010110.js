@@ -75,7 +75,7 @@ exports.registerUser = async (req, res) => {
     });
 
     // show success
-    res.render("success", { name, usn, department, seat, parents, email });
+    res.render("success", { name, usn, department, seat, parents, qrDataUrl });
 
   } catch (err) {
     console.error(err);

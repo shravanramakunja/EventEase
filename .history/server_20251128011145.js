@@ -38,9 +38,17 @@ app.set("views", path.join(__dirname, "views"));
 // ----------------------
 // ROUTES
 // ----------------------
-app.use("/", userRoutes);       
+app.use("/", userRoutes);       // ✔ only this
 app.use("/admin", adminRoutes);
 app.use("/checkin", checkinRoutes);
+
+// ❌ REMOVE THIS — breaks index page
+// app.get("/", (req, res) => {
+//   res.render("index");
+// });
+
+// ❌ REMOVE THIS — duplicate route
+// app.use("/users", userRoutes);
 
 // ----------------------
 // START SERVER
