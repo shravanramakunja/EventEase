@@ -2,16 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>QR Check-in</title>
+  <title>Check-in Scanner</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/html5-qrcode"></script>
-
-  <style>
-    #result {
-      transition: 0.3s ease;
-    }
-  </style>
 </head>
 
 <body class="bg-gray-100">
@@ -27,7 +21,11 @@
   </div>
 
   <script>
-    const scanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+    const scanner = new Html5QrcodeScanner("reader", {
+      fps: 10,
+      qrbox: 250
+    });
+
     scanner.render(onScanSuccess);
 
     function onScanSuccess(decodedText) {
@@ -37,7 +35,7 @@
         data = JSON.parse(decodedText);
       } catch (err) {
         document.getElementById("result").innerHTML =
-          `<span class="text-red-600">❌ Invalid QR Code</span>`;
+          `<span class="text-red-600">❌ Invalid QR Code Format</span>`;
         return;
       }
 
@@ -48,23 +46,13 @@
       })
       .then(res => res.json())
       .then(res => {
-
         if (res.success) {
-          // ✔ Show success message
           document.getElementById("result").innerHTML =
             `<span class="text-green-600">✔ Checked in: ${res.data.Name}</span>`;
-
-          // 🚀 Redirect to admin after 0.5 seconds
-          setTimeout(() => {
-            window.location.href = res.redirect;
-          }, 500);
-
-          return;
+        } else {
+          document.getElementById("result").innerHTML =
+            `<span class="text-red-600">❌ ${res.message}</span>`;
         }
-
-        // ❌ Show error message
-        document.getElementById("result").innerHTML =
-          `<span class="text-red-600">❌ ${res.message}</span>`;
       })
       .catch(() => {
         document.getElementById("result").innerHTML =

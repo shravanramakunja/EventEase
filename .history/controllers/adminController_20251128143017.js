@@ -31,7 +31,7 @@ exports.deleteUser = async (req, res) => {
 
     const uniqueId = req.params.uniqueId;
 
-   
+    // 🔥 1. Delete from MongoDB
     const mongoDelete = await Registration.deleteOne({ uniqueId });
 
     

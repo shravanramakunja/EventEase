@@ -1,0 +1,11 @@
+{
+  "watch": ["controllers", "routes", "config", "utils", "models", "server.js"],
+  "ignore": [
+    "public/qr/*",
+    "public/uploads/*",
+    "data/*",
+    "*.xlsx",
+    "*.csv"
+  ],
+  "ext": "js,json,ejs"
+}

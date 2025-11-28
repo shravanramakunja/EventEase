@@ -31,10 +31,9 @@ exports.submitCheckin = (req, res) => {
       }
     }
 
-    // SUCCESS → Send redirect command
     return res.json({
       success: true,
-      redirect: "/admin",
+      message: `${result.row.Name} checked in successfully`,
       data: result.row
     });
 

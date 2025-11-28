@@ -48,6 +48,7 @@ app.use("/", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/checkin", checkinRoutes);
 
+// ❌ REMOVE THIS — old and not needed
 
 // =====================
 //  START SERVER

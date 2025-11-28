@@ -2,7 +2,7 @@
 const excelHandler = require("../utils/excelHandler");
 const csvExporter = require("../utils/csvExporter");
 const path = require("path");
-const Registration = require("../models/Registration");   
+const Registration = require("../models/Registration");   // 🔥 Add MongoDB model
 
 exports.dashboard = (req, res) => {
   if (!req.session.admin) return res.redirect("/admin/login");
@@ -31,10 +31,10 @@ exports.deleteUser = async (req, res) => {
 
     const uniqueId = req.params.uniqueId;
 
-   
+    // 🔥 1. Delete from MongoDB
     const mongoDelete = await Registration.deleteOne({ uniqueId });
 
-    
+    // 🔥 2. Delete from Excel
     const excelDelete = excelHandler.deleteUser(uniqueId);
 
     if (mongoDelete.deletedCount === 0 && !excelDelete) {

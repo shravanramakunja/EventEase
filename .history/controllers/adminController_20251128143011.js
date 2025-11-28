@@ -31,10 +31,10 @@ exports.deleteUser = async (req, res) => {
 
     const uniqueId = req.params.uniqueId;
 
-   
+    // 🔥 1. Delete from MongoDB
     const mongoDelete = await Registration.deleteOne({ uniqueId });
 
-    
+    // 🔥 2. Delete from Excel
     const excelDelete = excelHandler.deleteUser(uniqueId);
 
     if (mongoDelete.deletedCount === 0 && !excelDelete) {
