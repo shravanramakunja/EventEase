@@ -2,34 +2,52 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Admin Dashboard</title>
+  <title>Admin Dashboard – EventEase</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-[#0f0f0f] text-white">
 
-<div class="max-w-6xl mx-auto mt-10">
+<!-- NAVBAR -->
+<nav class="w-full bg-[#0f0f0f] border-b border-gray-800 p-4">
+  <div class="max-w-6xl mx-auto flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-yellow-400">Admin Dashboard</h1>
 
-  <h1 class="text-3xl font-bold text-center mb-6">Admin Dashboard</h1>
+    <div class="flex gap-4">
+      <a href="/checkin" 
+        class="bg-yellow-400 text-black font-semibold px-4 py-2 rounded-lg hover:bg-yellow-300 transition">
+        Check-In Scanner
+      </a>
 
-  <div class="flex justify-between mb-4">
-    <a href="/checkin" class="bg-green-600 text-white px-4 py-2 rounded">Check-In Scanner</a>
-    <a href="/admin/export" class="bg-blue-600 text-white px-4 py-2 rounded">Export CSV</a>
+      <a href="/admin/export" 
+        class="bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg hover:bg-blue-500 transition">
+        Export CSV
+      </a>
+    </div>
   </div>
+</nav>
+
+
+<div class="max-w-6xl mx-auto mt-10 px-4">
 
   <!-- Manual Check-In -->
-  <div class="bg-white shadow p-5 rounded mb-6">
-    <h2 class="text-xl font-semibold mb-3">Manual Check-In</h2>
+  <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl p-6 mb-8">
+    <h2 class="text-xl font-semibold text-yellow-400 mb-4">Manual Check-In</h2>
 
     <form id="manualCheckinForm" class="space-y-3">
-      <input type="text" id="seat" name="seat" placeholder="Seat Number"
-        class="border p-2 w-full rounded">
 
-      <input type="text" id="email" name="email" placeholder="Email or Name"
-        class="border p-2 w-full rounded">
+      <input 
+        type="text" id="seat" name="seat" placeholder="Seat Number"
+        class="bg-[#111] border border-gray-700 text-white p-3 w-full rounded-lg focus:border-yellow-400 outline-none"
+      >
+
+      <input 
+        type="text" id="email" name="email" placeholder="Email or Name"
+        class="bg-[#111] border border-gray-700 text-white p-3 w-full rounded-lg focus:border-yellow-400 outline-none"
+      >
 
       <button type="submit"
-        class="bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded font-semibold">
+        class="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-4 py-2 rounded-lg transition">
         Confirm Check-In
       </button>
     </form>
@@ -39,39 +57,64 @@
 
 
   <!-- USERS TABLE -->
-  <div class="bg-white shadow rounded overflow-hidden">
-    <table class="w-full">
-      <thead class="bg-gray-200">
-        <tr>
-          <th class="p-2">Name</th>
-          <th class="p-2">USN</th>
-          <th class="p-2">Email</th>
-          <th class="p-2">Department</th>
-          <th class="p-2">Seat</th>
-          <th class="p-2">Parents</th>
-          <th class="p-2">Checked In</th>
-          <th class="p-2">Actions</th>
+  <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl overflow-hidden">
+
+    <table class="w-full text-left">
+      <thead class="bg-[#111] border-b border-gray-700">
+        <tr class="text-yellow-400">
+          <th class="p-3">Name</th>
+          <th class="p-3">USN</th>
+          <th class="p-3">Email</th>
+          <th class="p-3">Department</th>
+          <th class="p-3">Seat</th>
+          <th class="p-3">Parents</th>
+          <th class="p-3">Checked In</th>
+          <th class="p-3">ID</th>
+          <th class="p-3">Actions</th>
         </tr>
       </thead>
 
       <tbody>
-        <% data.forEach(u => { %>
-        <tr class="<%= u.CheckedIn === 'Yes' ? 'bg-green-100' : '' %>">
-          <td class="p-2"><%= u.Name %></td>
-          <td class="p-2"><%= u.USN %></td>
-          <td class="p-2"><%= u.Email %></td>
-          <td class="p-2"><%= u.Department %></td>
-          <td class="p-2"><%= u.Seat %></td>
-          <td class="p-2"><%= u.Parents %></td>
-          <td class="p-2"><%= u.CheckedIn %></td>
-          <td class="p-2">
-            <a href="/admin/delete/<%= u.UniqueID %>"
-              class="bg-red-600 text-white px-3 py-1 rounded">Delete</a>
+        <% data.forEach(u => { 
+             const idVal = u.uniqueId || u.UniqueID || u.UniqueId || u.uniqueID || '';
+        %>
+        <tr class="<%= u.CheckedIn === 'Yes' ? 'bg-green-900/30' : 'bg-[#0f0f0f]' %> border-b border-gray-800">
+          
+          <td class="p-3"><%= u.Name %></td>
+          <td class="p-3"><%= u.USN %></td>
+          <td class="p-3"><%= u.Email %></td>
+          <td class="p-3"><%= u.Department %></td>
+          <td class="p-3"><%= u.Seat %></td>
+          <td class="p-3"><%= u.Parents %></td>
+          <td class="p-3">
+            <span class="<%= u.CheckedIn === 'Yes'
+                ? 'text-green-400 font-semibold'
+                : 'text-red-400 font-semibold' %>">
+              <%= u.CheckedIn %>
+            </span>
           </td>
+
+          <td class="p-3 font-mono text-gray-400 text-sm"><%= idVal %></td>
+
+          <td class="p-3">
+            <% if (idVal && idVal.length > 0) { %>
+              <a href="/admin/delete/<%= idVal %>"
+                 class="bg-red-600 hover:bg-red-500 text-white px-3 py-1 rounded-lg font-semibold transition">
+                Delete
+              </a>
+            <% } else { %>
+              <button disabled
+                class="bg-gray-600 text-gray-300 px-3 py-1 rounded-lg cursor-not-allowed">
+                Delete
+              </button>
+            <% } %>
+          </td>
+
         </tr>
         <% }) %>
       </tbody>
     </table>
+
   </div>
 
 </div>
