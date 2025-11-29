@@ -57,15 +57,48 @@
   </div>
 
 
-  <!-- 🔍 SEARCH FILTER -->
-  <div class="mb-6">
-    <input
-      id="searchInput"
-      type="text"
-      placeholder="Search by Name, USN, Email, Department, Seat, Parents, CheckedIn, ID..."
-      class="bg-[#111] border border-gray-700 text-white p-3 w-full rounded-lg focus:border-yellow-400 outline-none"
-    />
+
+  <!-- ADVANCED FILTERS -->
+  <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl p-5 mb-6">
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+      <!-- Search -->
+      <input
+        id="searchInput"
+        type="text"
+        placeholder="Search by anything..."
+        class="bg-[#111] border border-gray-700 text-white p-3 rounded-lg focus:border-yellow-400 outline-none"
+      />
+
+      <!-- Department Dropdown (UPDATED from constants.js) -->
+      <select id="deptFilter"
+        class="bg-[#111] border border-gray-700 text-white p-3 rounded-lg focus:border-yellow-400 outline-none">
+        <option value="">All Departments</option>
+        <% departments.forEach(dep => { %>
+          <option value="<%= dep %>"><%= dep %></option>
+        <% }) %>
+      </select>
+
+      <!-- Sort -->
+      <select id="sortBy"
+        class="bg-[#111] border border-gray-700 text-white p-3 rounded-lg focus:border-yellow-400 outline-none">
+        <option value="">Sort By</option>
+        <option value="name">Name (A–Z)</option>
+        <option value="usn">USN</option>
+        <option value="seat">Seat</option>
+      </select>
+
+    </div>
+
+    <!-- Checked-in Toggle -->
+    <div class="mt-4 flex items-center gap-2">
+      <input type="checkbox" id="checkedToggle" class="w-5 h-5">
+      <label for="checkedToggle" class="text-yellow-400 font-medium">Show only checked-in</label>
+    </div>
+
   </div>
+
 
 
   <!-- USERS TABLE -->
@@ -88,10 +121,16 @@
 
       <tbody>
         <% data.forEach(u => { 
-             const idVal = u.uniqueId || u.UniqueID || u.UniqueId || u.uniqueID || '';
+            const idVal = u.uniqueId || u.UniqueID || u.UniqueId || u.uniqueID || '';
         %>
-        <tr class="<%= u.CheckedIn === 'Yes' ? 'bg-green-900/30' : 'bg-[#0f0f0f]' %> border-b border-gray-800">
-          
+        <tr class="user-row <%= u.CheckedIn === 'Yes' ? 'checked bg-green-900/30' : 'notchecked bg-[#0f0f0f]' %> border-b border-gray-800"
+            data-name="<%= u.Name.toLowerCase() %>"
+            data-usn="<%= u.USN.toLowerCase() %>"
+            data-email="<%= u.Email.toLowerCase() %>"
+            data-dept="<%= u.Department.toLowerCase() %>"
+            data-seat="<%= u.Seat.toString().toLowerCase() %>"
+            data-checked="<%= u.CheckedIn %>">
+
           <td class="p-3"><%= u.Name %></td>
           <td class="p-3"><%= u.USN %></td>
           <td class="p-3"><%= u.Email %></td>
@@ -134,20 +173,54 @@
 
 <script src="/js/manualCheckin.js"></script>
 
-<!-- 🔍 SEARCH FILTER SCRIPT -->
+<!-- ⭐ ADVANCED FILTER SCRIPT -->
 <script>
   const searchInput = document.getElementById("searchInput");
-  const rows = document.querySelectorAll("#dataTable tbody tr");
+  const deptFilter = document.getElementById("deptFilter");
+  const sortBy = document.getElementById("sortBy");
+  const checkedToggle = document.getElementById("checkedToggle");
+  const rows = [...document.querySelectorAll(".user-row")];
 
-  searchInput.addEventListener("input", function () {
-    const query = this.value.toLowerCase();
+  function applyFilters() {
+    const search = searchInput.value.toLowerCase();
+    const dept = deptFilter.value.toLowerCase();
+    const showChecked = checkedToggle.checked;
 
-    rows.forEach((row) => {
-      const rowText = row.innerText.toLowerCase();
-      row.style.display = rowText.includes(query) ? "" : "none";
+    rows.forEach(row => {
+      const matchesSearch = row.innerText.toLowerCase().includes(search);
+      const matchesDept = dept === "" || row.dataset.dept === dept;
+      const matchesChecked = !showChecked || row.dataset.checked === "Yes";
+
+      row.style.display = (matchesSearch && matchesDept && matchesChecked) ? "" : "none";
     });
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+  deptFilter.addEventListener("change", applyFilters);
+  checkedToggle.addEventListener("change", applyFilters);
+
+
+  // Sorting
+  sortBy.addEventListener("change", function () {
+    const tbody = document.querySelector("#dataTable tbody");
+    const type = this.value;
+
+    let sorted = [...rows];
+
+    if (type === "name") {
+      sorted.sort((a,b) => a.dataset.name.localeCompare(b.dataset.name));
+    } 
+    else if (type === "usn") {
+      sorted.sort((a,b) => a.dataset.usn.localeCompare(b.dataset.usn));
+    }
+    else if (type === "seat") {
+      sorted.sort((a,b) => Number(a.dataset.seat) - Number(b.dataset.seat));
+    }
+
+    sorted.forEach(r => tbody.appendChild(r));
   });
 </script>
+
 
 </body>
 </html>
