@@ -2,7 +2,7 @@ const excelHandler = require("../utils/excelHandler");
 const path = require("path");
 const fs = require("fs");
 const csvWriter = require("csv-writer").createObjectCsvWriter;
-const { DEPARTMENTS } = require("../utils/constants"); // <-- added
+const { DEPARTMENTS } = require("../utils/constants"); // <-- ADDED
 
 // ==============================
 // ADMIN LOGIN
@@ -29,7 +29,7 @@ exports.dashboard = (req, res) => {
 
   return res.render("adminDashboard", {
     data,
-    departments: Object.keys(DEPARTMENTS)  // <-- send department list to EJS
+    departments: Object.keys(DEPARTMENTS)  // <-- SEND TO EJS
   });
 };
 
@@ -70,7 +70,7 @@ exports.deleteUser = (req, res) => {
   const deleted = excelHandler.deleteUser(id);
 
   if (!deleted) {
-    console.log("User not found:", id);
+    console.log("User not found in Excel:", id);
   }
 
   return res.redirect("/admin");
@@ -122,7 +122,10 @@ exports.manualCheckin = (req, res) => {
     const { seat, email } = req.body;
 
     if (!seat || !email) {
-      return res.status(400).json({ success: false, message: "Seat + Email/Name required" });
+      return res.status(400).json({
+        success: false,
+        message: "Seat + Email/Name required"
+      });
     }
 
     const rows = excelHandler.getAll();
