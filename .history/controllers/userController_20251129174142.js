@@ -26,6 +26,7 @@ exports.registerUser = async (req, res) => {
 
     const seat = pickRandomSeatForDepartment(department);
     const uniqueId = uuidv4();
+
     const qrPayload = { name, usn, department, seat, parents, uniqueId };
     const qrBase64 = await QRCode.toDataURL(JSON.stringify(qrPayload));
 
@@ -84,10 +85,7 @@ exports.registerUser = async (req, res) => {
       ]
     });
 
-    // 🔥 FIX: PREVENT DOUBLE SUBMISSION — REDIRECT WITH QUERY PARAMS
-    return res.redirect(
-      `/success?name=${encodeURIComponent(name)}&usn=${encodeURIComponent(usn)}&department=${encodeURIComponent(department)}&seat=${encodeURIComponent(seat)}&parents=${encodeURIComponent(parents)}&email=${encodeURIComponent(email)}`
-    );
+    res.render("success", { name, usn, department, seat, parents, email });
 
   } catch (err) {
     console.error(err);

@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
@@ -12,6 +10,7 @@ function ensureAdminOrFromCheckin(req, res, next) {
   }
 
   // If query param fromCheckin=true, allow access (used for redirect after scanning)
+  // Accept several truthy values
   const qc = req.query.fromCheckin;
   if (qc === "true" || qc === "1" || qc === "yes") {
     return next();
@@ -26,26 +25,19 @@ router.get("/login", (req, res) => {
   res.render("adminLogin", { error: null });
 });
 
-// Handle login
+// Handle login (POST) — assume adminController.login exists
 router.post("/login", adminController.login);
 
-// Admin Dashboard (protected)
+// Protected admin dashboard (uses middleware)
 router.get("/", ensureAdminOrFromCheckin, adminController.dashboard);
 
 // Export CSV (protected)
 router.get("/export", ensureAdminOrFromCheckin, adminController.exportCSV);
 
-// Manual check-in (POST) — FIXED
-router.post(
-  "/manual-checkin",
-  ensureAdminOrFromCheckin,
-  adminController.manualCheckin
-);
-
 // Delete user (protected)
 router.get("/delete/:id", ensureAdminOrFromCheckin, adminController.deleteUser);
 
-// Logout
+// Logout (optional)
 router.get("/logout", (req, res) => {
   req.session.destroy(err => {
     res.redirect("/admin/login");

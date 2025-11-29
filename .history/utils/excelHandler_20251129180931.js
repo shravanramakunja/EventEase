@@ -4,103 +4,91 @@ const path = require("path");
 
 const filePath = path.join(__dirname, "..", "data", "registrations.xlsx");
 const dataFolder = path.join(__dirname, "..", "data");
-
 if (!fs.existsSync(dataFolder)) fs.mkdirSync(dataFolder, { recursive: true });
 
 const COLUMNS = [
-  "Name",
-  "USN",
-  "Email",
-  "Department",
-  "Seat",
-  "Parents",
-  "uniqueId",
-  "CheckedIn"
+  "Name", "USN", "Email", "Department", "Seat", "Parents", "uniqueId", "CheckedIn"
 ];
 
-// =====================
-// Initialize Excel File
-// =====================
+// Initialize Excel
 function initExcel() {
   if (!fs.existsSync(filePath)) {
     const wb = xlsx.utils.book_new();
     const ws = xlsx.utils.json_to_sheet([], { header: COLUMNS });
-    xlsx.utils.book_append_sheet(wb, ws, "Registrations");
+    xlsx.utils.book_append_sheet(wb, ws, "registrations");
     xlsx.writeFile(wb, filePath);
   }
 }
 
-// =====================
-// Read All Rows
-// =====================
+// Get all rows
 exports.getAll = () => {
   initExcel();
   const wb = xlsx.readFile(filePath);
-  const ws = wb.Sheets["Registrations"];
+  const ws = wb.Sheets["registrations"];
   return xlsx.utils.sheet_to_json(ws, { defval: "" });
 };
 
-// =====================
-// Save New Registration
-// =====================
-exports.saveRegistration = (row) => {
+// Save new registration
+exports.saveRegistration = (data) => {
   const rows = exports.getAll();
-  rows.push(row);
-
+  rows.push(data);
+  
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.json_to_sheet(rows, { header: COLUMNS });
   xlsx.utils.book_append_sheet(wb, ws, "Registrations");
   xlsx.writeFile(wb, filePath);
 };
 
-// =====================
 // UPDATE CHECK-IN
-// =====================
-exports.updateCheckin = (id) => {
+exports.updateCheckin = (uniqueId) => {
   const rows = exports.getAll();
 
-  const index = rows.findIndex(r =>
-    r.uniqueId === id ||
-    r.UniqueID === id ||
-    r.uniqueID === id ||
-    r.UniqueId === id
+  // Find user with tolerant matching
+  const i = rows.findIndex(r =>
+    r.uniqueId === uniqueId ||
+    r.UniqueID === uniqueId ||
+    r.uniqueID === uniqueId ||
+    r.UniqueId === uniqueId
   );
 
-  if (index === -1) {
+  if (i === -1) {
     return { ok: false, reason: "not_found" };
   }
 
-  if (rows[index].CheckedIn === "Yes") {
-    return { ok: false, reason: "already_checked_in", row: rows[index] };
+  if (rows[i].CheckedIn === "Yes") {
+    return { ok: false, reason: "already_checked_in", row: rows[i] };
   }
 
-  rows[index].CheckedIn = "Yes";
+  rows[i].CheckedIn = "Yes";
 
+  // Save updated sheet
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.json_to_sheet(rows, { header: COLUMNS });
   xlsx.utils.book_append_sheet(wb, ws, "Registrations");
   xlsx.writeFile(wb, filePath);
 
-  return { ok: true, row: rows[index] };
+  return { ok: true, row: rows[i] };
 };
 
-// =====================
-// DELETE USER
-// =====================
+// Delete user by ID
 exports.deleteUser = (id) => {
   const rows = exports.getAll();
-  const newRows = rows.filter(r => !(
-    r.uniqueId === id ||
-    r.UniqueID === id ||
-    r.uniqueID === id ||
-    r.UniqueId === id
-  ));
+  const initial = rows.length;
 
-  if (newRows.length === rows.length) return false;
+  const newRows = rows.filter(r => {
+    return !(
+      r.uniqueId === id ||
+      r.UniqueID === id ||
+      r.uniqueID === id ||
+      r.UniqueId === id
+    );
+  });
+
+  if (newRows.length === initial) return false;
 
   const wb = xlsx.utils.book_new();
   const ws = xlsx.utils.json_to_sheet(newRows, { header: COLUMNS });
-  xlsx.utils.book_append_sheet(wb, ws, "Registrations");
+  xlsx.utils.book_append_sheet(wb, ws, "registrations");
   xlsx.writeFile(wb, filePath);
 
   return true;

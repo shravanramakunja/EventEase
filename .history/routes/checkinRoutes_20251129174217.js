@@ -10,7 +10,7 @@ router.get("/", (req, res) => {
 // QR Check-in
 router.post("/submit", checkinController.submitCheckin);
 
-// Manual Check-in
+// Manual Check-in (Seat + Email/Name)
 router.post("/manual", checkinController.manualCheckin);
 
 module.exports = router;

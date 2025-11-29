@@ -1,8 +1,6 @@
 const excelHandler = require("../utils/excelHandler");
 
-// =========================================
 // QR CHECK-IN
-// =========================================
 exports.submitCheckin = (req, res) => {
   try {
     const { uniqueId } = req.body;
@@ -19,11 +17,9 @@ exports.submitCheckin = (req, res) => {
     if (!result.ok) {
       if (result.reason === "not_found") {
         return res.status(404).json({
-          success: false,
-          message: "User not found"
+          success: false, message: "User not found"
         });
       }
-
       if (result.reason === "already_checked_in") {
         return res.status(409).json({
           success: false,
@@ -41,13 +37,14 @@ exports.submitCheckin = (req, res) => {
 
   } catch (err) {
     console.error("Check-in Error:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({
+      success: false,
+      message: "Server error"
+    });
   }
 };
 
-// =========================================
-// MANUAL CHECK-IN (Seat + Email/Name)
-// =========================================
+// MANUAL CHECK-IN
 exports.manualCheckin = (req, res) => {
   try {
     const { seat, email } = req.body;
@@ -61,7 +58,7 @@ exports.manualCheckin = (req, res) => {
 
     const rows = excelHandler.getAll();
 
-    const user = rows.find(r =>
+    let user = rows.find(r =>
       r.Seat?.toString() === seat.toString() &&
       (r.Email === email || r.Name === email)
     );
@@ -81,16 +78,16 @@ exports.manualCheckin = (req, res) => {
       });
     }
 
-    const result = excelHandler.updateCheckin(user.uniqueId);
+    excelHandler.updateCheckin(user.uniqueId);
 
     return res.json({
       success: true,
       message: `${user.Name} (Seat ${user.Seat}) checked in successfully`,
-      data: result.row
+      data: user
     });
 
   } catch (err) {
     console.error("Manual Check-in Error:", err);
-    return res.status(500).json({ success: false, message: "Server error" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };

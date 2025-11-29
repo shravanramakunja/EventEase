@@ -33,9 +33,10 @@ exports.submitCheckin = (req, res) => {
       }
     }
 
+    // Redirect to admin dashboard but include a query flag so auth middleware can allow it
     return res.json({
       success: true,
-      redirect: "/admin",
+      redirect: "/admin?fromCheckin=true",
       data: result.row
     });
 
@@ -85,6 +86,8 @@ exports.manualCheckin = (req, res) => {
 
     return res.json({
       success: true,
+      // match QR behavior — allow direct open of admin page
+      redirect: "/admin?fromCheckin=true",
       message: `${user.Name} (Seat ${user.Seat}) checked in successfully`,
       data: result.row
     });
