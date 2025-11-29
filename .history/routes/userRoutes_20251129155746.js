@@ -1,21 +1,20 @@
+// routes/userRoutes.js
 const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 
-// Landing Page (Home)
-router.get("/", (req, res) => {
-  res.render("index"); 
-});
+// Show registration page
+router.get("/", userController.showRegister);
 
-// Show Registration Form
 router.get("/register", (req, res) => {
-  res.render("register");  // This is the new register.ejs
+  res.render("index");  // or "registerPage" depending on your file name
 });
 
-// Handle Registration Submit
+
+// Handle registration form
 router.post("/register", userController.registerUser);
 
-// Success Page
+// Success page
 router.get("/success", (req, res) => {
   res.render("success");
 });
