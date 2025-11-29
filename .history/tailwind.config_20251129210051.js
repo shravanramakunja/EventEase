@@ -7,20 +7,13 @@ module.exports = {
   theme: {
     extend: {
 
- fontFamily: {
-        exo: ['Exo', 'sans-serif'],
-        goldman: ['Goldman', 'cursive'],
-        custom: ['Paytone One', 'sans-serif'],
-        main: ['Open Sans', 'Exo']
-      },
 
 
 
 
 
 
-
-
+      
     },
   },
   plugins: [],

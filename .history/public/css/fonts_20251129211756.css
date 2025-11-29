@@ -1,0 +1,18 @@
+/* Exo Font - Offline Version */
+@font-face {
+  font-family: 'Exo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Exo-VariableFont_wght.ttf') format('truetype');
+}
+
+/* Apply Exo font globally */
+body {
+  font-family: 'Exo', sans-serif !important;
+}
+
+/* Ensure all text elements use Exo */
+* {
+  font-family: 'Exo', sans-serif;
+}
