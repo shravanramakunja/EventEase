@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>EventEase</title>
+  <link rel="icon" type="image/png" href="/uploads/eventease-logo.png">
   <link rel="stylesheet" href="/css/fonts.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -12,6 +13,23 @@
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
       background-size: 50px 50px;
       background-position: center center;
+    }
+
+    @keyframes scroll {
+      0% {
+        transform: translateX(0);
+      }
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .animate-scroll {
+      animation: scroll 20s linear infinite;
+    }
+
+    .animate-scroll:hover {
+      animation-play-state: paused;
     }
   </style>
 </head>
@@ -80,6 +98,71 @@
       A seamless event registration & check-in platform designed to simplify attendance,
       automate workflows, and enhance the entire event experience.
     </p>
+  </section>
+
+  <!-- SCROLLING TECH STACK SECTION -->
+  <section class="py-12 overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 mb-8">
+      <h3 class="text-xl md:text-2xl font-semibold text-center text-gray-300">
+        Built with modern technology stack
+      </h3>
+    </div>
+    
+    <!-- Scrolling Container -->
+    <div class="relative flex">
+      <div class="flex gap-8 animate-scroll">
+        <!-- First Set -->
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Node.js</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Express</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">MongoDB</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">EJS</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Tailwind CSS</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">QR Code</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Nodemailer</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">JavaScript</span>
+        </div>
+        
+        <!-- Duplicate Set for seamless loop -->
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Node.js</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Express</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">MongoDB</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">EJS</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Tailwind CSS</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">QR Code</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">Nodemailer</span>
+        </div>
+        <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl px-8 py-4 whitespace-nowrap">
+          <span class="text-white text-lg font-semibold">JavaScript</span>
+        </div>
+      </div>
     </div>
   </section>
 
