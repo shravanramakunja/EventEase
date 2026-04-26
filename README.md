@@ -2,6 +2,10 @@
 
 A seamless event registration and check-in platform designed to simplify attendance, automate workflows, and enhance the entire event experience.
 
+## Real-World Usage
+
+EventEase was used for a nearby college annual college fest with approximately 250 student attendees.
+
 ## Features
 
 - Smart QR code-based check-in system
