@@ -47,7 +47,6 @@ app.set("views", path.join(__dirname, "views"));
 app.use("/", userRoutes);
 app.use("/admin", adminRoutes);
 app.use("/checkin", checkinRoutes);
-app.use("/checkin", require("./routes/checkinRoutes"));
 
 // =====================
 //  START SERVER

@@ -86,15 +86,12 @@ exports.registerUser = async (req, res) => {
           "emailTemplate.html"
         );
 
-        const qrBase64 = qrBuffer.toString("base64");
-
         const html = ejs.render(fs.readFileSync(templatePath, "utf8"), {
           name,
           usn,
           department,
           seat,
           parents,
-          qrBase64,
           date: "15th NOVEMBER 2024",
           address: "Dr M V Jayaraman Auditorium",
           time: "2:00 PM",
@@ -110,6 +107,13 @@ exports.registerUser = async (req, res) => {
           to: [email],
           subject: `Your Registration – Seat ${seat}`,
           html,
+          attachments: [
+            {
+              filename: "qrcode.png",
+              content: qrBuffer,
+              cid: "qrImage",
+            },
+          ],
         });
 
         console.log(`📧 Email sent to ${email}`);
