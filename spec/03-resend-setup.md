@@ -118,11 +118,11 @@ Familiarize yourself with:
 
 | # | Task | Done? |
 |---|---|---|
-| 3.1 | Resend account created | ☐ |
-| 3.2 | Domain verified (or using sandbox) | ☐ |
-| 3.3 | API key generated & saved (starts with `re_`) | ☐ |
-| 3.4 | `from` address format decided | ☐ |
-| 3.5 | Understand sandbox limitation (only `delivered@resend.dev` until domain verified) | ☐ |
+| 3.1 | Resend account created | ✅ |
+| 3.2 | Domain verified (or using sandbox) | ✅ (sandbox mode) |
+| 3.3 | API key generated & saved (starts with `re_`) | ✅ |
+| 3.4 | `from` address format decided | ✅ (`onboarding@resend.dev`) |
+| 3.5 | Understand sandbox limitation (only `delivered@resend.dev` until domain verified) | ✅ |
 
 ---
 

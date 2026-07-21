@@ -152,7 +152,7 @@ Before moving on, verify your project structure:
 | 4.1 | `render.yaml` placed at project root (or using manual setup) | ☐ |
 | 4.2 | Web Service created on Render | ☐ |
 | 4.3 | All 7 environment variables configured in Render | ☐ |
-| 4.4 | `.env.example` created and committed | ☐ |
+| 4.4 | `.env.example` created and committed | ✅ |
 | 4.5 | Pre-deployment health checks passed | ☐ |
 
 ---

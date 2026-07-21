@@ -250,14 +250,14 @@ Upload the logo to a public place and use an absolute URL:
 
 | # | Task | Done? |
 |---|---|---|
-| 5.2 | `resend` npm package installed | ☐ |
-| 5.3 | `config/mailer.js` updated to use Resend | ☐ |
-| 5.4 | `controllers/userController.js` email call updated | ☐ |
-| 5.5 | `controllers/registerController.js` updated (if used) | ☐ |
-| 5.6 | Email template updated for Resend attachment format | ☐ |
-| 5.7 | `nodemailer` uninstalled | ☐ |
-| 5.7 | `MAIL_USER` / `MAIL_PASS` removed from `.env` | ☐ |
-| 5.7 | All changes committed and pushed to GitHub | ☐ |
+| 5.2 | `resend` npm package installed | ✅ |
+| 5.3 | `config/mailer.js` updated to use Resend | ✅ |
+| 5.4 | `controllers/userController.js` email call updated | ✅ |
+| 5.5 | `controllers/registerController.js` updated (if used) | ✅ |
+| 5.6 | Email template updated for Resend attachment format | ✅ |
+| 5.7 | `nodemailer` uninstalled | ✅ |
+| 5.7 | `MAIL_USER` / `MAIL_PASS` removed from `.env` | ✅ |
+| 5.7 | All changes committed and pushed to GitHub | ✅ |
 
 ---
 

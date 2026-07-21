@@ -112,11 +112,11 @@ Since `.env` is ignored by Git, create a local test:
 
 | # | Task | Done? |
 |---|---|---|
-| 2.1 | M0 cluster created on MongoDB Atlas | ☐ |
-| 2.2 | Database user created (`eventeaseUser`) | ☐ |
-| 2.3 | Network access set to `0.0.0.0/0` | ☐ |
-| 2.4 | Connection string (`MONGO_URI`) copied & saved | ☐ |
-| 2.5 | Local test: app connects to Atlas successfully | ☐ |
+| 2.1 | M0 cluster created on MongoDB Atlas | ✅ |
+| 2.2 | Database user created (`eeventease_db_user`) | ✅ |
+| 2.3 | Network access set to `0.0.0.0/0` | ✅ |
+| 2.4 | Connection string (`MONGO_URI`) copied & saved | ✅ |
+| 2.5 | Local test: app connects to Atlas successfully | ✅ |
 
 ---
 

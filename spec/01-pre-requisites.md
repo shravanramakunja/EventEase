@@ -85,15 +85,15 @@ node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 
 | # | Task | Done? |
 |---|---|---|
-| 1.1 | GitHub account ready & repository pushed | ☐ |
-| 1.2 | MongoDB Atlas account created | ☐ |
-| 1.3 | Resend account created | ☐ |
+| 1.1 | GitHub account ready & repository pushed | ✅ |
+| 1.2 | MongoDB Atlas account created | ✅ |
+| 1.3 | Resend account created | ✅ |
 | 1.4 | Render account created | ☐ |
-| 1.5 | MongoDB database user password generated | ☐ |
-| 1.6 | Admin password generated | ☐ |
-| 1.7 | Session secret generated | ☐ |
-| 1.8 | All secrets saved securely (not in code!) | ☐ |
-| 1.9 | Code pushed to GitHub public repo | ☐ |
+| 1.5 | MongoDB database user password generated | ✅ |
+| 1.6 | Admin password generated | ✅ |
+| 1.7 | Session secret generated | ✅ |
+| 1.8 | All secrets saved securely (not in code!) | ✅ |
+| 1.9 | Code pushed to GitHub public repo | ✅ |
 
 ---
 
