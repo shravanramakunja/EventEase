@@ -1,8 +1,12 @@
 const excelHandler = require("../utils/excelHandler");
 const path = require("path");
 const fs = require("fs");
+const ejs = require("ejs");
 const csvWriter = require("csv-writer").createObjectCsvWriter;
-const { DEPARTMENTS } = require("../utils/constants"); // <-- added
+const { DEPARTMENTS } = require("../utils/constants");
+const Registration = require("../models/Registration");
+const resend = require("../config/mailer");
+const QRCode = require("qrcode");
 
 // ==============================
 // ADMIN LOGIN
@@ -74,6 +78,86 @@ exports.deleteUser = (req, res) => {
   }
 
   return res.redirect("/admin");
+};
+
+// ==============================
+// APPROVE USER
+// ==============================
+exports.approveUser = async (req, res) => {
+  try {
+    const { uniqueId } = req.params;
+
+    // Find user in MongoDB
+    const user = await Registration.findOne({ uniqueId });
+
+    if (!user) {
+      console.log("User not found in DB:", uniqueId);
+      return res.redirect("/admin");
+    }
+
+    if (user.approved) {
+      console.log("User already approved:", uniqueId);
+      return res.redirect("/admin");
+    }
+
+    // Use stored QR or generate new one
+    let qrBuffer = user.qrCode;
+    if (!qrBuffer) {
+      const qrPayload = {
+        name: user.name,
+        usn: user.usn,
+        department: user.department,
+        seat: user.seat,
+        parents: user.parents,
+        uniqueId: user.uniqueId,
+      };
+      qrBuffer = await QRCode.toBuffer(JSON.stringify(qrPayload));
+    }
+
+    // Render email template
+    const templatePath = path.join(__dirname, "..", "templates", "emailTemplate.html");
+    const html = ejs.render(fs.readFileSync(templatePath, "utf8"), {
+      name: user.name,
+      usn: user.usn,
+      department: user.department,
+      seat: user.seat,
+      parents: user.parents,
+      date: "15th NOVEMBER 2024",
+      address: "Dr M V Jayaraman Auditorium",
+      time: "2:00 PM",
+      title: "Event Registration — Approved",
+      year: new Date().getFullYear(),
+    });
+
+    // Send approval email with QR
+    await resend.emails.send({
+      from: '"EventEase" <noreply@buildercentral.in>',
+      to: [user.email],
+      subject: `Registration Approved – Seat ${user.seat}`,
+      html,
+      attachments: [
+        {
+          filename: "qrcode.png",
+          content: qrBuffer,
+          cid: "qrImage",
+        },
+      ],
+    });
+
+    // Mark as approved in MongoDB
+    user.approved = true;
+    await user.save();
+
+    // Update Excel
+    excelHandler.updateApproval(uniqueId, "Yes");
+
+    console.log(`📧 Approval email sent to ${user.email}`);
+    return res.redirect("/admin");
+
+  } catch (err) {
+    console.error("Approve Error:", err);
+    return res.redirect("/admin");
+  }
 };
 
 // ==============================

@@ -15,7 +15,8 @@ const COLUMNS = [
   "Seat",
   "Parents",
   "uniqueId",
-  "CheckedIn"
+  "CheckedIn",
+  "Approved"
 ];
 
 // =====================
@@ -82,6 +83,30 @@ exports.updateCheckin = (id) => {
   xlsx.writeFile(wb, filePath);
 
   return { ok: true, row: rows[index] };
+};
+
+// =====================
+// UPDATE APPROVAL
+// =====================
+exports.updateApproval = (uniqueId, value) => {
+  const rows = exports.getAll();
+  const idx = rows.findIndex(r =>
+    r.uniqueId === uniqueId ||
+    r.UniqueID === uniqueId ||
+    r.uniqueID === uniqueId ||
+    r.UniqueId === uniqueId
+  );
+
+  if (idx === -1) return false;
+
+  rows[idx].Approved = value;
+
+  const wb = xlsx.utils.book_new();
+  const ws = xlsx.utils.json_to_sheet(rows, { header: COLUMNS });
+  xlsx.utils.book_append_sheet(wb, ws, "Registrations");
+  xlsx.writeFile(wb, filePath);
+
+  return true;
 };
 
 // =====================

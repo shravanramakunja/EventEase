@@ -6,9 +6,11 @@ const RegistrationSchema = new mongoose.Schema({
   email: String,
   department: String,
   seat: String,
-  parents: Number,         // ✔ MATCHES CONTROLLER
-  uniqueId: String,        // ✔ required for QR scanning
-  checkedIn: { type: Boolean, default: false }
+  parents: Number,
+  uniqueId: { type: String, unique: true },
+  checkedIn: { type: Boolean, default: false },
+  approved: { type: Boolean, default: false },
+  qrCode: { type: Buffer, default: null }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Registration", RegistrationSchema);

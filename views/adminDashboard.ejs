@@ -103,9 +103,7 @@
 
 
   <!-- USERS TABLE -->
-  <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl overflow-x-auto">
-
-    <table id="dataTable" class="w-full text-left min-w-[800px]">
+  <div class="bg-[#1b1b1b] border border-gray-700 rounded-xl overflow-x-auto">      <table id="dataTable" class="w-full text-left min-w-[900px]">
       <thead class="bg-[#111] border-b border-gray-700">
         <tr class="text-yellow-400">
           <th class="p-2 sm:p-3 text-xs sm:text-sm">Name</th>
@@ -115,7 +113,7 @@
           <th class="p-2 sm:p-3 text-xs sm:text-sm">Seat</th>
           <th class="p-2 sm:p-3 text-xs sm:text-sm">Parents</th>
           <th class="p-2 sm:p-3 text-xs sm:text-sm">Checked In</th>
-          <th class="p-2 sm:p-3 text-xs sm:text-sm">ID</th>
+          <th class="p-2 sm:p-3 text-xs sm:text-sm">Approved</th>
           <th class="p-2 sm:p-3 text-xs sm:text-sm">Actions</th>
         </tr>
       </thead>
@@ -123,6 +121,7 @@
       <tbody>
         <% data.forEach(u => { 
             const idVal = u.uniqueId || u.UniqueID || u.UniqueId || u.uniqueID || '';
+            const approved = (u.Approved || '').toLowerCase();
         %>
         <tr class="user-row <%= u.CheckedIn === 'Yes' ? 'checked bg-green-900/30' : 'notchecked bg-[#0f0f0f]' %> border-b border-gray-800"
             data-name="<%= u.Name.toLowerCase() %>"
@@ -130,7 +129,8 @@
             data-email="<%= u.Email.toLowerCase() %>"
             data-dept="<%= u.Department.toLowerCase() %>"
             data-seat="<%= u.Seat.toString().toLowerCase() %>"
-            data-checked="<%= u.CheckedIn %>">
+            data-checked="<%= u.CheckedIn %>"
+            data-approved="<%= approved %>">
 
           <td class="p-2 sm:p-3 text-xs sm:text-sm"><%= u.Name %></td>
           <td class="p-2 sm:p-3 text-xs sm:text-sm"><%= u.USN %></td>
@@ -146,20 +146,34 @@
             </span>
           </td>
 
-          <td class="p-2 sm:p-3 font-mono text-gray-400 text-xs"><%= idVal %></td>
+          <td class="p-2 sm:p-3 text-xs sm:text-sm">
+            <span class="<%= approved === 'yes'
+                ? 'text-green-400 font-semibold'
+                : 'text-yellow-400 font-semibold' %>">
+              <%= u.Approved || 'No' %>
+            </span>
+          </td>
 
-          <td class="p-2 sm:p-3">m:p-3">
-            <% if (idVal && idVal.length > 0) { %>
-              <a href="/admin/delete/<%= idVal %>"
-                 class="bg-red-600 hover:bg-red-500 text-white px-2 sm:px-3 py-1 rounded-lg font-semibold transition text-xs sm:text-sm inline-block whitespace-nowrap">
-                Delete
-              </a>
-            <% } else { %>
-              <button disabled
-                class="bg-gray-600 text-gray-300 px-2 sm:px-3 py-1 rounded-lg cursor-not-allowed text-xs sm:text-sm whitespace-nowrap">
-                Delete
-              </button>
-            <% } %>
+          <td class="p-2 sm:p-3 text-xs sm:text-sm">
+            <div class="flex flex-col sm:flex-row gap-1 sm:gap-2">
+              <% if (approved !== 'yes' && idVal && idVal.length > 0) { %>
+                <a href="/admin/approve/<%= idVal %>"
+                   class="bg-green-600 hover:bg-green-500 text-white px-2 sm:px-3 py-1 rounded-lg font-semibold transition text-xs sm:text-sm inline-block whitespace-nowrap text-center">
+                  Approve
+                </a>
+              <% } %>
+              <% if (idVal && idVal.length > 0) { %>
+                <a href="/admin/delete/<%= idVal %>"
+                   class="bg-red-600 hover:bg-red-500 text-white px-2 sm:px-3 py-1 rounded-lg font-semibold transition text-xs sm:text-sm inline-block whitespace-nowrap text-center">
+                  Delete
+                </a>
+              <% } else { %>
+                <button disabled
+                  class="bg-gray-600 text-gray-300 px-2 sm:px-3 py-1 rounded-lg cursor-not-allowed text-xs sm:text-sm whitespace-nowrap">
+                  Delete
+                </button>
+              <% } %>
+            </div>
           </td>
 
         </tr>

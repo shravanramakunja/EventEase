@@ -1,9 +1,5 @@
-const fs = require("fs");
-const path = require("path");
-const ejs = require("ejs");
 const QRCode = require("qrcode");
 const { v4: uuidv4 } = require("uuid");
-const resend = require("../config/mailer");
 const excelHandler = require("../utils/excelHandler");
 const { pickRandomSeatForDepartment } = require("../utils/seatAllocator");
 const { DEPARTMENTS } = require("../utils/constants");
@@ -52,7 +48,7 @@ exports.registerUser = async (req, res) => {
     );
 
     // -------------------------------------
-    // BACKGROUND TASK: QR + Excel + Email
+    // BACKGROUND TASK: QR + Excel (no email — sent after admin approval)
     // -------------------------------------
     setImmediate(async () => {
       try {
@@ -64,7 +60,14 @@ exports.registerUser = async (req, res) => {
         const qrBuffer = await QRCode.toBuffer(qrJson);
         console.log("✔ QR Generated");
 
-        // Update Excel
+        // Store QR buffer in MongoDB for later email sending
+        await Registration.updateOne(
+          { uniqueId },
+          { $set: { qrCode: qrBuffer } }
+        );
+        console.log("✔ QR Stored in DB");
+
+        // Update Excel (with Approved: No)
         excelHandler.saveRegistration({
           Name: name,
           USN: usn,
@@ -74,49 +77,10 @@ exports.registerUser = async (req, res) => {
           Parents: parents,
           uniqueId,
           CheckedIn: "No",
+          Approved: "No",
         });
 
-        console.log("✔ Excel Updated");
-
-        // Load HTML email template
-        const templatePath = path.join(
-          __dirname,
-          "..",
-          "templates",
-          "emailTemplate.html"
-        );
-
-        const html = ejs.render(fs.readFileSync(templatePath, "utf8"), {
-          name,
-          usn,
-          department,
-          seat,
-          parents,
-          date: "15th NOVEMBER 2024",
-          address: "Dr M V Jayaraman Auditorium",
-          time: "2:00 PM",
-          title: "Event Registration",
-          year: new Date().getFullYear(),
-        });
-
-        // Send Email via Resend (HTTPS API - works on Render!)
-        const FROM_ADDRESS = `"EventEase" <noreply@buildercentral.in>`;
-
-        await resend.emails.send({
-          from: FROM_ADDRESS,
-          to: [email],
-          subject: `Your Registration – Seat ${seat}`,
-          html,
-          attachments: [
-            {
-              filename: "qrcode.png",
-              content: qrBuffer,
-              cid: "qrImage",
-            },
-          ],
-        });
-
-        console.log(`📧 Email sent to ${email}`);
+        console.log("✔ Excel Updated (pending approval)");
 
       } catch (bgErr) {
         console.error("Background Task Error:", bgErr);

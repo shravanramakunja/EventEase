@@ -42,6 +42,9 @@ router.post(
   adminController.manualCheckin
 );
 
+// Approve user (protected)
+router.get("/approve/:uniqueId", ensureAdminOrFromCheckin, adminController.approveUser);
+
 // Delete user (protected)
 router.get("/delete/:id", ensureAdminOrFromCheckin, adminController.deleteUser);
 
