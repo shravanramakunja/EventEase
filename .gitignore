@@ -2,3 +2,4 @@
 .txt
 .history
 node_modules/
+spec/
