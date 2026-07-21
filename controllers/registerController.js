@@ -14,7 +14,7 @@ exports.registerUser = async (req, res) => {
 
     // 3️⃣ Send Confirmation Email (optional)
     await resend.emails.send({
-      from: '"EventEase" <onboarding@resend.dev>',
+      from: '"EventEase" <noreply@buildercentral.in>',
       to: [userData.email],
       subject: "Registration Successful",
       text: `Hello ${userData.name}, your seat is ${userData.seat}.`,

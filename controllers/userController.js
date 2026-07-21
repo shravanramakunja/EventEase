@@ -103,7 +103,7 @@ exports.registerUser = async (req, res) => {
         });
 
         // Send Email via Resend (HTTPS API - works on Render!)
-        const FROM_ADDRESS = `"EventEase" <onboarding@resend.dev>`;
+        const FROM_ADDRESS = `"EventEase" <noreply@buildercentral.in>`;
 
         await resend.emails.send({
           from: FROM_ADDRESS,
