@@ -99,6 +99,10 @@ exports.approveUser = async (req, res) => {
       return res.redirect("/admin");
     }
 
+    // Build QR download URL dynamically
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    const qrDownloadUrl = `${baseUrl}/qr/download/${uniqueId}`;
+
     // Render email template
     const templatePath = path.join(__dirname, "..", "templates", "emailTemplate.html");
     const html = ejs.render(fs.readFileSync(templatePath, "utf8"), {
@@ -112,6 +116,7 @@ exports.approveUser = async (req, res) => {
       time: "2:00 PM",
       title: "Event Registration — Approved",
       year: new Date().getFullYear(),
+      qrDownloadUrl,
     });
 
     // Send approval email

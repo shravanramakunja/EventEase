@@ -15,7 +15,10 @@ router.get("/register", (req, res) => {
 // Handle Registration Submit (POST)
 router.post("/register", userController.registerUser);
 
-// FIXED SUCCESS PAGE (GET - NO SAVING HAPPENS HERE)
+// QR Code Download (by uniqueId)
+router.get("/qr/download/:uniqueId", userController.downloadQR);
+
+// Success Page
 router.get("/success", (req, res) => {
   res.render("success", {
     name: req.query.name,

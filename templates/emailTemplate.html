@@ -114,9 +114,18 @@
       <p><span class="label">Time:</span> <%= time %></p>
     </div>
 
-    <!-- QR Note -->
+    <!-- QR Download -->
     <div class="qr-box">
-      <p style="font-size: 14px; color: #333; font-weight: bold;"> QR is attached below — show this at the entrance for quick check-in</p>
+      <p style="font-size: 14px; color: #333; font-weight: bold; margin-bottom: 16px;">
+        Your QR code is ready!
+      </p>
+      <a href="<%= qrDownloadUrl %>"
+         style="display: inline-block; background: #ffcc00; color: #000; font-weight: bold; padding: 12px 28px; border-radius: 8px; text-decoration: none; font-size: 16px;">
+        Download QR Code
+      </a>
+      <p style="font-size: 13px; color: #777; margin-top: 12px;">
+        Show this QR at the entrance for quick check-in
+      </p>
     </div>
 
     <p class="thanks">Your registration has been approved!</p>

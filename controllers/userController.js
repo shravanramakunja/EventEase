@@ -5,6 +5,35 @@ const { pickRandomSeatForDepartment } = require("../utils/seatAllocator");
 const { DEPARTMENTS } = require("../utils/constants");
 const Registration = require("../models/Registration");
 
+// ==============================
+// QR CODE DOWNLOAD
+// ==============================
+exports.downloadQR = async (req, res) => {
+  try {
+    const { uniqueId } = req.params;
+
+    const user = await Registration.findOne({ uniqueId });
+
+    if (!user || !user.qrCode) {
+      return res.status(404).send("QR code not found");
+    }
+
+    res.set({
+      "Content-Type": "image/png",
+      "Content-Disposition": `attachment; filename="qrcode-${user.usn || user.uniqueId}.png"`,
+    });
+
+    return res.send(user.qrCode);
+
+  } catch (err) {
+    console.error("QR Download Error:", err);
+    return res.status(500).send("Server error");
+  }
+};
+
+// ==============================
+// REGISTER USER
+// ==============================
 exports.registerUser = async (req, res) => {
   try {
     const { name, usn, email, department, parents } = req.body;
