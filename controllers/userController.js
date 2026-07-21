@@ -3,7 +3,7 @@ const path = require("path");
 const ejs = require("ejs");
 const QRCode = require("qrcode");
 const { v4: uuidv4 } = require("uuid");
-const transporter = require("../config/mailer");
+const resend = require("../config/mailer");
 const excelHandler = require("../utils/excelHandler");
 const { pickRandomSeatForDepartment } = require("../utils/seatAllocator");
 const { DEPARTMENTS } = require("../utils/constants");
@@ -86,12 +86,15 @@ exports.registerUser = async (req, res) => {
           "emailTemplate.html"
         );
 
+        const qrBase64 = qrBuffer.toString("base64");
+
         const html = ejs.render(fs.readFileSync(templatePath, "utf8"), {
           name,
           usn,
           department,
           seat,
           parents,
+          qrBase64,
           date: "15th NOVEMBER 2024",
           address: "Dr M V Jayaraman Auditorium",
           time: "2:00 PM",
@@ -99,24 +102,14 @@ exports.registerUser = async (req, res) => {
           year: new Date().getFullYear(),
         });
 
-        // Send Email
-        await transporter.sendMail({
-          from: `"EventEase" <${process.env.MAIL_USER}>`,
-          to: email,
+        // Send Email via Resend (HTTPS API - works on Render!)
+        const FROM_ADDRESS = `"EventEase" <onboarding@resend.dev>`;
+
+        await resend.emails.send({
+          from: FROM_ADDRESS,
+          to: [email],
           subject: `Your Registration – Seat ${seat}`,
           html,
-          attachments: [
-            {
-              filename: "qrcode.png",
-              content: qrBuffer,
-              cid: "qrImage"
-            },
-            {
-              filename: "eventease-logo.png",
-              path: path.join(__dirname, "..", "public", "uploads", "eventease-logo.png"),
-              cid: "eventLogo"
-            }
-          ],
         });
 
         console.log(`📧 Email sent to ${email}`);

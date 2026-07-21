@@ -1,6 +1,6 @@
 const Registration = require("../models/Registration");
 const excelHandler = require("../utils/excelHandler");
-const transporter = require("../config/mailer"); // your nodemailer setup
+const resend = require("../config/mailer");
 
 exports.registerUser = async (req, res) => {
   try {
@@ -13,9 +13,9 @@ exports.registerUser = async (req, res) => {
     const savedUser = await Registration.create(userData);
 
     // 3️⃣ Send Confirmation Email (optional)
-    await transporter.sendMail({
-      from: '"Event Team" <noreply@event.com>',
-      to: userData.email,
+    await resend.emails.send({
+      from: '"EventEase" <onboarding@resend.dev>',
+      to: [userData.email],
       subject: "Registration Successful",
       text: `Hello ${userData.name}, your seat is ${userData.seat}.`,
     });
