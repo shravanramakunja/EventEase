@@ -259,6 +259,104 @@
     </div>
   </section>
 
+  <!-- TEST CREDENTIALS SECTION -->
+  <section class="max-w-xl mx-auto py-12 sm:py-16 px-4">
+    <div class="bg-[#1b1b1b] border border-yellow-500/30 rounded-2xl p-6 sm:p-8 shadow-lg shadow-yellow-500/5">
+      
+      <!-- Header -->
+      <div class="flex items-center gap-3 mb-6">
+        <span class="text-2xl">🧪</span>
+        <h2 class="text-xl sm:text-2xl font-bold text-white">Test Credentials</h2>
+        <span class="bg-yellow-400/10 text-yellow-400 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-yellow-500/30">
+          For Testing
+        </span>
+      </div>
+
+      <p class="text-gray-400 text-sm mb-6">
+        Use these credentials to access the admin dashboard and explore all features.
+      </p>
+
+      <!-- Email -->
+      <div class="mb-4">
+        <label class="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1.5">Email</label>
+        <div class="flex items-center gap-2">
+          <div class="flex-1 bg-[#111] border border-gray-700 rounded-lg px-4 py-2.5 text-white font-mono text-sm select-all">
+            <%= adminEmail %>
+          </div>
+          <button onclick="copyText('<%= adminEmail %>', this)"
+            class="bg-[#222] hover:bg-[#333] border border-gray-700 text-gray-300 px-3 py-2.5 rounded-lg text-sm transition relative"
+            title="Copy email">
+            <span class="copy-label">📋</span>
+            <span class="copied-toast hidden absolute -top-8 left-1/2 -translate-x-1/2 bg-yellow-400 text-black text-xs font-semibold px-2 py-1 rounded whitespace-nowrap">Copied!</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div>
+        <label class="block text-gray-400 text-xs font-semibold uppercase tracking-wider mb-1.5">Password</label>
+        <div class="flex items-center gap-2">
+          <div class="flex-1 bg-[#111] border border-gray-700 rounded-lg px-4 py-2.5 text-white font-mono text-sm flex items-center justify-between">
+            <span id="adminPassDisplay" class="select-all"><%= adminPassword.replace(/./g, '•') %></span>
+            <span id="adminPassReal" class="hidden select-all"><%= adminPassword %></span>
+          </div>
+          <button onclick="togglePass()"
+            class="bg-[#222] hover:bg-[#333] border border-gray-700 text-gray-300 px-3 py-2.5 rounded-lg text-sm transition"
+            title="Show/hide password">
+            👁️
+          </button>
+          <button onclick="copyText('<%= adminPassword %>', this)"
+            class="bg-[#222] hover:bg-[#333] border border-gray-700 text-gray-300 px-3 py-2.5 rounded-lg text-sm transition relative"
+            title="Copy password">
+            <span class="copy-label">📋</span>
+            <span class="copied-toast hidden absolute -top-8 left-1/2 -translate-x-1/2 bg-yellow-400 text-black text-xs font-semibold px-2 py-1 rounded whitespace-nowrap">Copied!</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Login link -->
+      <a href="/admin/login" 
+        class="mt-6 inline-flex items-center gap-2 bg-yellow-400 text-black font-semibold px-5 py-2.5 rounded-lg hover:bg-yellow-300 transition w-full justify-center">
+        Go to Admin Login →
+      </a>
+
+      <p class="text-gray-500 text-xs text-center mt-4">
+        ⚠️ These credentials are for testing only. Change them in production.
+      </p>
+    </div>
+  </section>
+
+  <script>
+    let passVisible = false;
+    function togglePass() {
+      const display = document.getElementById("adminPassDisplay");
+      const real = document.getElementById("adminPassReal");
+      passVisible = !passVisible;
+      if (passVisible) {
+        display.textContent = real.textContent;
+      } else {
+        display.textContent = "".padStart(real.textContent.length, "•");
+      }
+    }
+
+    function copyText(text, btn) {
+      const doCopy = () => {
+        const toast = btn.querySelector('.copied-toast');
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 1500);
+      };
+      navigator.clipboard.writeText(text).then(doCopy).catch(() => {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        doCopy();
+      });
+    }
+  </script>
+
   <!-- FOOTER -->
   <footer class="bg-black py-6 mt-8 sm:mt-12">
     <p class="text-center text-gray-400 text-xs sm:text-sm px-4">

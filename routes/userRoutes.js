@@ -4,7 +4,10 @@ const userController = require("../controllers/userController");
 
 // Landing Page (Home)
 router.get("/", (req, res) => {
-  res.render("index");
+  res.render("index", {
+    adminEmail: process.env.ADMIN_EMAIL,
+    adminPassword: process.env.ADMIN_PASSWORD,
+  });
 });
 
 // Show Registration Form
